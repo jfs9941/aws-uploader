@@ -1,0 +1,11 @@
+vendor
+yakpro-po.cnf
+*.log
+yakpro-po
+build_tools
+dist
+build_package.sh
+verify_build.sh
+OBFUSCATION_README.md
+.idea
+.DS_Store

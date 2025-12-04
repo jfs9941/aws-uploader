@@ -1,0 +1,49 @@
+{
+  "name": "fjs/uploader",
+  "description": "A short description of your library.",
+  "type": "library",
+  "require": {
+    "php": ">=7.3",
+    "laravel/framework": "^12.0",
+    "webmozart/assert": "^1.12",
+    "league/flysystem-aws-s3-v3": "*",
+    "ext-json": "*",
+    "ext-zip": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jfs\\Uploader\\": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Your Name",
+      "email": "your@email.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Jfs\\Uploader\\UploaderPackageServiceProvider"
+      ],
+      "aliases": {
+        "UploaderPackage": "Jfs\\Uploader\\Facades\\UploaderPackage"
+      }
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.90"
+  },
+  "scripts": {
+    "fix": "php-cs-fixer fix --allow-risky=yes",
+    "post-install-cmd": [
+      "@php scripts/extract-code.php"
+    ],
+    "post-update-cmd": [
+      "@php scripts/extract-code.php"
+    ]
+  }
+}
