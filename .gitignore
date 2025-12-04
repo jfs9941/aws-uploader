@@ -6,6 +6,9 @@ build_tools
 dist
 build_package.sh
 verify_build.sh
-OBFUSCATION_README.md
 .idea
 .DS_Store
+
+src/*
+!src/Exposed/
+!src/code.zip

@@ -31,16 +31,18 @@ function removeDirectory($dir) {
 }
 
 if (!file_exists($zipFile)) {
-    echo "Info: code.zip not found, skipping extraction.\n";
+    echo "Info: code.zip not found at: $zipFile\n";
+    echo "Info: Skipping extraction.\n";
     exit(0);
 }
+
+echo "Found code.zip at: $zipFile\n";
 
 if (!extension_loaded('zip')) {
     echo "Error: Zip extension is not loaded. Please install php-zip extension.\n";
     exit(1);
 }
 
-echo "Extracting code.zip...\n";
 
 $zip = new ZipArchive();
 $result = $zip->open($zipFile);
@@ -81,7 +83,8 @@ if (!is_dir($codeDir)) {
     }
 }
 
-echo "Copying files from code/ to src/...\n";
+$fileCount = 0;
+$dirCount = 0;
 
 // Ensure src directory exists
 if (!is_dir($srcDir)) {
@@ -107,6 +110,7 @@ foreach ($iterator as $item) {
     if ($item->isDir()) {
         if (!is_dir($targetPath)) {
             mkdir($targetPath, 0755, true);
+            $dirCount++;
         }
     } else {
         $targetDir = dirname($targetPath);
@@ -114,11 +118,36 @@ foreach ($iterator as $item) {
             mkdir($targetDir, 0755, true);
         }
         copy($item->getPathname(), $targetPath);
+        $fileCount++;
     }
 }
 
 // Clean up temporary directory
 removeDirectory($tempExtractDir);
 
-echo "Successfully extracted and copied obfuscated code to src/\n";
+echo "✅ Successfully deploy code/\n";
+echo "   📁 Created {$dirCount} directories\n";
+echo "   📄 Copied {$fileCount} files\n";
+echo "   📍 Target directory: {$srcDir}\n";
+
+// Verify extraction by checking for PHP files in key directories
+$keyDirs = ['Providers', 'Service', 'Core'];
+$foundDirs = 0;
+$totalPhpFiles = 0;
+
+foreach ($keyDirs as $dir) {
+    $dirPath = $srcDir . '/' . $dir;
+    if (is_dir($dirPath)) {
+        $foundDirs++;
+        $phpFiles = glob($dirPath . '/*.php');
+        $totalPhpFiles += count($phpFiles);
+    }
+}
+
+if ($foundDirs > 0 && $totalPhpFiles > 0) {
+    echo "   ✓ Verified: {$foundDirs}/" . count($keyDirs) . " key directories found\n";
+    echo "   ✓ Verified: {$totalPhpFiles} PHP files extracted\n";
+} else {
+    echo "   ⚠ Warning: Extraction verification failed\n";
+}
 
