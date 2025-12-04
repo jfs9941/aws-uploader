@@ -1,7 +1,45 @@
 {
   "name": "fjs/uploader",
-  "description": "A short description of your library.",
+  "description": "A comprehensive Laravel file upload package with support for pre-signed URLs, chunked uploads, video processing (HLS encoding, thumbnails), image processing (watermarking, blur, compression), and multiple storage drivers (S3, Local). Features include state machine management, async job processing, and secure obfuscated code distribution.",
   "type": "library",
+  "keywords": [
+    "laravel",
+    "upload",
+    "file-upload",
+    "s3",
+    "presigned-url",
+    "chunked-upload",
+    "video-processing",
+    "hls",
+    "video-encoding",
+    "image-processing",
+    "thumbnail",
+    "watermark",
+    "blur",
+    "compression",
+    "multipart-upload",
+    "file-storage",
+    "flysystem",
+    "aws-s3",
+    "state-machine",
+    "async-jobs",
+    "obfuscated"
+  ],
+  "homepage": "https://github.com/fjs/uploader",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "FJS Team",
+      "email": "dev@fjs.com",
+      "homepage": "https://github.com/fjs",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/fjs/uploader/issues",
+    "source": "https://github.com/fjs/uploader",
+    "docs": "https://github.com/fjs/uploader/wiki"
+  },
   "require": {
     "php": ">=7.3",
     "laravel/framework": "^12.0",
@@ -15,25 +53,8 @@
       "Jfs\\Uploader\\": "src/"
     }
   },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Your Name",
-      "email": "your@email.com"
-    }
-  ],
   "minimum-stability": "stable",
   "prefer-stable": true,
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Jfs\\Uploader\\UploaderPackageServiceProvider"
-      ],
-      "aliases": {
-        "UploaderPackage": "Jfs\\Uploader\\Facades\\UploaderPackage"
-      }
-    }
-  },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.90"
   },
@@ -45,5 +66,23 @@
     "post-update-cmd": [
       "@php scripts/extract-code.php"
     ]
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Jfs\\Uploader\\Providers\\UploadServiceProvider"
+      ],
+      "aliases": {
+        "UploaderPackage": "Jfs\\Uploader\\Facades\\UploaderPackage"
+      }
+    }
   }
 }
