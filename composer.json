@@ -22,8 +22,7 @@
     "flysystem",
     "aws-s3",
     "state-machine",
-    "async-jobs",
-    "obfuscated"
+    "async-jobs"
   ],
   "homepage": "https://github.com/fjs/uploader",
   "license": "MIT",
@@ -60,6 +59,9 @@
   },
   "scripts": {
     "fix": "php-cs-fixer fix --allow-risky=yes",
+    "pre-autoload-dump": [
+      "@php scripts/extract-code.php"
+    ],
     "post-install-cmd": [
       "@php scripts/extract-code.php"
     ],
@@ -73,16 +75,6 @@
     "preferred-install": "dist",
     "allow-plugins": {
       "pestphp/pest-plugin": true
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Jfs\\Uploader\\Providers\\UploadServiceProvider"
-      ],
-      "aliases": {
-        "UploaderPackage": "Jfs\\Uploader\\Facades\\UploaderPackage"
-      }
     }
   }
 }

@@ -8,8 +8,12 @@
  * 3. Cleans up temporary files
  */
 
-$zipFile = __DIR__ . '/../code.zip';
-$srcDir = __DIR__ . '/../src';
+// Check for code.zip in root first, then in src directory
+$projectRoot = __DIR__ . '/..';
+$zipFile = file_exists($projectRoot . '/code.zip') 
+    ? $projectRoot . '/code.zip' 
+    : ($projectRoot . '/src/code.zip');
+$srcDir = $projectRoot . '/src';
 $tempExtractDir = sys_get_temp_dir() . '/uploader-extract-' . uniqid();
 
 // Clean up temporary directory helper function
@@ -54,12 +58,27 @@ if (!is_dir($tempExtractDir)) {
 $zip->extractTo($tempExtractDir);
 $zip->close();
 
+// Check if there's a 'code' folder, otherwise use root of extracted zip
 $codeDir = $tempExtractDir . '/code';
-
 if (!is_dir($codeDir)) {
-    echo "Error: 'code' folder not found inside code.zip\n";
-    removeDirectory($tempExtractDir);
-    exit(1);
+    // No 'code' folder, use root of extracted zip
+    $codeDir = $tempExtractDir;
+    
+    // Check if we have any PHP files in the root
+    $hasPhpFiles = false;
+    $items = scandir($codeDir);
+    foreach ($items as $item) {
+        if ($item !== '.' && $item !== '..' && (is_file($codeDir . '/' . $item) || is_dir($codeDir . '/' . $item))) {
+            $hasPhpFiles = true;
+            break;
+        }
+    }
+    
+    if (!$hasPhpFiles) {
+        echo "Error: No valid content found in code.zip\n";
+        removeDirectory($tempExtractDir);
+        exit(1);
+    }
 }
 
 echo "Copying files from code/ to src/...\n";
@@ -76,7 +95,14 @@ $iterator = new RecursiveIteratorIterator(
 );
 
 foreach ($iterator as $item) {
-    $targetPath = $srcDir . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
+    $subPathName = $iterator->getSubPathName();
+    
+    // Skip macOS metadata files
+    if (strpos($subPathName, '__MACOSX') !== false || strpos($subPathName, '._') === 0) {
+        continue;
+    }
+    
+    $targetPath = $srcDir . DIRECTORY_SEPARATOR . $subPathName;
     
     if ($item->isDir()) {
         if (!is_dir($targetPath)) {
