@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jfs\Uploader\Exposed;
+namespace Jfs\Exposed;
 
 interface FileProcessingStrategyInterface
 {

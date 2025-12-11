@@ -1,6 +1,6 @@
 <?php
 
-namespace Jfs\Uploader\Exposed\Jobs;
+namespace Jfs\Exposed\Jobs;
 
 interface GenerateThumbnailJobInterface
 {

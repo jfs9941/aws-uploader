@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jfs\Uploader\Exposed;
-
-use Jfs\Uploader\Core\FileInterface;
-use Jfs\Uploader\Core\PreSignedModel;
+namespace Jfs\Exposed;
 
 interface UploadServiceInterface
 {
